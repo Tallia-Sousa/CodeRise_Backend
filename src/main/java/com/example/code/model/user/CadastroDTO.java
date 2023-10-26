@@ -12,5 +12,6 @@ public record CadastroDTO(
         @NotBlank(message = "O email é obrigatorio")
         String email,
         @NotBlank(message = "A senha é obrigatoria")
-        String senha) {
+        String senha,
+        UserRole role) {
 }

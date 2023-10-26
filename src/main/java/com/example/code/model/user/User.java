@@ -30,14 +30,14 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "Senha", nullable = false)
     private String senha;
-    @Column(name = "role" ,length = 20)
+    @Column(name = "role")
     private UserRole roles;
 
     public User(String nome, String email, String senha, UserRole role){
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.roles = roles;
+        this.roles = role;
     }
 
     @Override
@@ -45,6 +45,8 @@ public class User implements UserDetails {
         if(this.roles == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
+
+
 
     @Override
     public String getPassword() {

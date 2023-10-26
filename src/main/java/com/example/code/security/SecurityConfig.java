@@ -17,6 +17,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -36,7 +38,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/list").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/users/atualizar").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/users//{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/cursos/cadastrarcursos").hasRole("ADMIN")
+
+
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)//antes que caia nos filtros acima
@@ -48,18 +54,19 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
+   @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addAllowedOrigin("http://127.0.0.1:5500");
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

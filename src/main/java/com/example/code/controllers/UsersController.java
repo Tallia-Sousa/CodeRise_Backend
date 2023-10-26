@@ -1,11 +1,10 @@
 package com.example.code.controllers;
 
 import com.example.code.model.user.*;
-//import com.example.auth.security.TokenService;
-import com.example.code.model.user.*;
 import com.example.code.repositories.UserRepository;
-import com.example.code.security.TokenService;
 import com.example.code.services.AuthorizationService;
+import com.example.code.services.TokenService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-public class UserAuthenticationController {
+public class UsersController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -39,34 +38,42 @@ public class UserAuthenticationController {
     private TokenService tokenService;
 
 
+
+
     @GetMapping("/list")
     public ResponseEntity<List<User>> listaUsuarios() {
         return ResponseEntity.status(200).body(authorizationService.listarUsuarios());
     }
 
+
+
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AutenticarDTO data) {
+    public ResponseEntity login(@RequestBody @Valid AutenticarDTO data, HttpServletResponse response) {
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
+            var auth = this.authenticationManager.authenticate(usernamePassword);//verifica se as credenciais
+            var token = tokenService.generateToken((User) auth.getPrincipal());
 
-    try {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-
-        var token = tokenService.generateToken((User) auth.getPrincipal());//vai pegar usuario principal
-
-        return ResponseEntity.ok(new LoginResponseDTO(token));// retorna um token pro usuar
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(401).build();
+        }
     }
-    catch (AuthenticationException e){
 
-        return ResponseEntity.status(401).build();
-    }}
+
+
+
+
+
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid CadastroDTO data){
         if(this.repository.findByEmail(data.email()) != null){
             return ResponseEntity.status(422).build();}
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
-        User newUser = new User(data.nome(), data.email(), encryptedPassword, UserRole.USER);
+
+        User newUser = new User(data.nome(), data.email(), encryptedPassword,UserRole.USER);
 
         this.repository.save(newUser);
 
