@@ -2,8 +2,9 @@ package com.example.code.controllers;
 
 import com.example.code.model.user.*;
 import com.example.code.repositories.UserRepository;
-import com.example.code.services.AuthorizationService;
 import com.example.code.services.TokenService;
+import com.example.code.services.UserService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-//@CrossOrigin( allowedHeaders ="https://127.0.0.1:5500" )
+
 
 
 @RestController
@@ -32,7 +34,7 @@ public class UsersController {
     private UserRepository repository;
 
     @Autowired
-    private AuthorizationService authorizationService;
+    private UserService UserService;
 
     @Autowired
     private TokenService tokenService;
@@ -40,9 +42,13 @@ public class UsersController {
 
 
 
-    @GetMapping("/list")
-    public ResponseEntity<List<User>> listaUsuarios() {
-        return ResponseEntity.status(200).body(authorizationService.listarUsuarios());
+    @PostMapping("/cadastro")
+    public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data){
+        if(this.repository.findByEmail(data.email()) != null){
+            return ResponseEntity.status(422).build();}
+
+        UserService.cadastrarUsers(data);
+        return ResponseEntity.status(201).build();
     }
 
 
@@ -64,34 +70,44 @@ public class UsersController {
 
 
 
+//    @GetMapping("/perfil")
+//    public ResponseEntity<User> getPerfil() {
+//        // Recupera o usuário autenticado
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        if (authentication != null && authentication.getPrincipal() instanceof User) {
+//            User user = (User) authentication.getPrincipal();
+//            return ResponseEntity.status(200).body(user);
+//        } else {
+//            return ResponseEntity.status(401).build(); // Não autenticado
+//        }
+//    }
 
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid CadastroDTO data){
-        if(this.repository.findByEmail(data.email()) != null){
-            return ResponseEntity.status(422).build();}
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
-
-        User newUser = new User(data.nome(), data.email(), encryptedPassword,UserRole.USER);
-
-        this.repository.save(newUser);
-
-        return ResponseEntity.status(201).build();
+    @GetMapping("/list")
+    public ResponseEntity<List<User>> listaUsuarios() {
+        return ResponseEntity.status(200).body(UserService.listarUsuarios());
+    }
+    @PostMapping("/recuperarcodigo")
+    public ResponseEntity recuperarCodigoSenha(@RequestBody User user) {
+        return ResponseEntity.ok(UserService.solicitarCodigo(user.getEmail()));
     }
 
 
+//    @PutMapping("/recuperarsenha")
+//    public ResponseEntity alterarSenha(@RequestBody User user){
+//        return ResponseEntity.ok(UserService.alterarSenha(user));
+//
+//    }
 
-    @PutMapping("/atualizar")
-    public ResponseEntity<User>atualizarUsuario(@RequestBody CadastroDTO usuario){
-        return ResponseEntity.status(201).body(authorizationService.atualizarUsuarios(usuario));
-    }
+
+
 
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarUsuario(@PathVariable String id){
-        authorizationService.deletarUsuarios(id);
+        UserService.deletarUsuarios(id);
         return ResponseEntity.status(204).build();
 
     }
@@ -99,7 +115,7 @@ public class UsersController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-        //// Cria um mapa para armazenar mensagens de erro de validação.
+        //// Criar um mapa para armazenar mensagens de erro de validação.
         Map<String, String> erros = new HashMap<>();
         // Obtém todos os erros de validação associados à exceção.
         ex.getBindingResult().getAllErrors().forEach((error) ->{

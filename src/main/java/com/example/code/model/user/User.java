@@ -1,20 +1,19 @@
 package com.example.code.model.user;
-
+//
+//import com.example.code.model.favoritar.Favoritar;
+import com.example.code.model.cursos.Cursos;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Table(name = "users")
 @Entity(name = "users")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -22,16 +21,21 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "Id")
     private String id;
-    @Column(name = "Nome", length = 200, nullable = false)
+    @Column(name = "Nome", length = 50, nullable = false)
     private String nome;
     @Column(name = "Email", length = 50, nullable = false, unique = true)
     private String email;
     @Column(name = "Senha", nullable = false)
     private String senha;
-    @Column(name = "role")
+    @Column(name = "Role")
     private UserRole roles;
+    @Column(name = "CodigoRecuperacaoSenha")
+    private String codigorecuperacaosenha;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "DataEnvioCodigo")
+    private Date dataEnvioCodigo;
 
     public User(String nome, String email, String senha, UserRole role){
         this.nome = nome;

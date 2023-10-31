@@ -28,25 +28,6 @@ public class AuthorizationService implements UserDetailsService {
         return repository.findByEmail(username);
     }
 
-    public List<User> listarUsuarios() {
-        List<User> list = repository.findAll();
-        return list;
-    }
-
-
-
-    public User atualizarUsuarios(CadastroDTO usuario) {
-        String esconder = new BCryptPasswordEncoder().encode(usuario.senha());
-        User usuarioNovo = new User(usuario.nome(), usuario.email(), esconder, UserRole.USER);
-        return repository.save(usuarioNovo);
-    }
-
-    public Boolean deletarUsuarios(String id) {
-        repository.deleteById(id);
-        return true;
-    }
-
-
 
 }
 

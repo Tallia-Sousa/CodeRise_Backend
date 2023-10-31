@@ -35,6 +35,7 @@ public class SecurityFilter extends OncePerRequestFilter {
                 UserDetails user = userRepository.findByEmail(login);
 
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                // Isso  autentica o usuário e permite que ele acesse as rota protegidoa.
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {

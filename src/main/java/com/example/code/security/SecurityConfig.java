@@ -35,12 +35,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/cadastro").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/recuperarcodigo").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/list").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/users/atualizar").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/cursos/cadastrarcursos").hasRole("ADMIN")
-
 
 
                         .anyRequest().authenticated()

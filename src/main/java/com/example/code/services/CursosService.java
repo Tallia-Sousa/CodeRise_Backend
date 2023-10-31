@@ -26,8 +26,7 @@ public class CursosService {
 
     public Cursos cadastrarCursos(CursosDto cursosDto){
 
-        Cursos curso = new Cursos(cursosDto.getArea(), cursosDto.getDescricao(),
-                cursosDto.getVideos(), cursosDto.getLinksPdf(), cursosDto.getComunidades());
+        Cursos curso = new Cursos(cursosDto.getArea(), cursosDto.getDescricao(), cursosDto.getPlaylist());
         return repositoryCursos.save(curso);
 
     }

@@ -9,10 +9,8 @@ import lombok.Setter;
 public class CursosDto {
 
         private String area;
-        private String Videos;
+        private String playlist;
         private String descricao;
-        private String LinksPdf;
-        private String comunidades;
 
 
 }

@@ -50,7 +50,7 @@ public class TokenService {
                     .withIssuer("CodeRise")//emissor
                     .build()
                     .verify(token)
-                    .getSubject();//pega  o user e everiffica se o token passado é valido e foi stm que gerou
+                    .getSubject();//pega  o user e verifica se o token passado é valido e foi stm que gerou
         } catch (JWTVerificationException exception) {
             // se retornar isso pq o token expirou ou pq o token é invalido
             return "";
