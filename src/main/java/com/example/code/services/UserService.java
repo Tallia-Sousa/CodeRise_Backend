@@ -77,26 +77,26 @@ public String solicitarCodigo(String email) {
          return format.format(new Date())+id;
 
 }
-
-
-    public String alterarSenha(User user){
-        User usuarioN = (User) repository.findByEmailAndCodigorecuperacaosenha(user.getEmail(), user.getSenha());
-        if(usuarioN != null){
-        Date diferenca = new Date(new Date().getTime() - usuarioN.getDataEnvioCodigo().getTime());
-          if(diferenca.getTime() / 1000 < 900){// depois de 15 min apos receber o cod ele expira
-              String esconder = new BCryptPasswordEncoder().encode(user.getSenha());//encriptografar
-                   usuarioN.setSenha(esconder);
-                   usuarioN.setCodigorecuperacaosenha(null); // se tentar recuperar novamente nao vai ser encontrado
-              repository.saveAndFlush(usuarioN);
-              return "Senha alterada com sucesso";
-    } else {
-              return "Tempo expirado, solicite um novo codigo";
-          }}
-          else {
-              return "email ou codigo nao encontados";
-            }
-
-    }// depois arumar com base no user msm
+//
+//
+//    public String alterarSenha(User user){
+//        User usuarioN = (User) repository.findByEmailAndCodigorecuperacaosenha(user.getEmail(), user.getSenha());
+//        if(usuarioN != null){
+//        Date diferenca = new Date(new Date().getTime() - usuarioN.getDataEnvioCodigo().getTime());
+//          if(diferenca.getTime() / 1000 < 900){// depois de 15 min apos receber o cod ele expira
+//              String esconder = new BCryptPasswordEncoder().encode(user.getSenha());//encriptografar
+//                   usuarioN.setSenha(esconder);
+//                   usuarioN.setCodigorecuperacaosenha(null); // se tentar recuperar novamente nao vai ser encontrado
+//              repository.saveAndFlush(usuarioN);
+//              return "Senha alterada com sucesso";
+//    } else {
+//              return "Tempo expirado, solicite um novo codigo";
+//          }}
+//          else {
+//              return "email ou codigo nao encontados";
+//            }
+//
+//    }//
 
 
 }
