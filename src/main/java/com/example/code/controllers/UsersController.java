@@ -90,7 +90,7 @@ public class UsersController {
     }
     @PostMapping("/recuperarcodigo")
     public ResponseEntity recuperarCodigoSenha(@RequestBody User user) {
-        return ResponseEntity.ok(UserService.solicitarCodigo(user.getEmail()));
+        return ResponseEntity.ok(UserService.usuarioSolicitarCodigo(user.getEmail()));
     }
 
 
