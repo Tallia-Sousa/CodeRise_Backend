@@ -1,12 +1,18 @@
 package com.example.code.controllers;
 
+import com.example.code.Responses.Respostas;
 import com.example.code.model.user.*;
+//import com.example.code.repositories.RepositorySenha;
 import com.example.code.repositories.UserRepository;
+import com.example.code.services.AuthorizationService;
 import com.example.code.services.TokenService;
 import com.example.code.services.UserService;
-import jakarta.annotation.security.PermitAll;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +34,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
+
 public class UsersController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -38,19 +46,19 @@ public class UsersController {
 
     @Autowired
     private TokenService tokenService;
-
-
+    @Autowired
+    private AuthorizationService authorizationService;
 
 
     @PostMapping("/cadastro")
-    public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data){
-        if(this.repository.findByEmail(data.email()) != null){
-            return ResponseEntity.status(422).build();}
+    public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data) {
+        if (this.repository.findByEmail(data.email()) != null) {
+            return ResponseEntity.status(422).build();
+        }
 
         UserService.cadastrarUsers(data);
         return ResponseEntity.status(201).build();
     }
-
 
 
     @PostMapping("/login")
@@ -69,39 +77,57 @@ public class UsersController {
 
 
 
+    @PostMapping("/verificarToken")
+    public ResponseEntity validarToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
 
-//    @GetMapping("/perfil")
-//    public ResponseEntity<User> getPerfil() {
-//        // Recupera o usuário autenticado
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if (authentication != null && authentication.getPrincipal() instanceof User) {
-//            User user = (User) authentication.getPrincipal();
-//            return ResponseEntity.status(200).body(user);
-//        } else {
-//            return ResponseEntity.status(401).build(); // Não autenticado
-//        }
-//    }
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7).trim(); // Remove o prefixo 'Bearer ' e espaços em branco do token
+            String resultadoValidacao = tokenService.validateToken(token);
 
+            if (!resultadoValidacao.isEmpty()) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(403).build();
+            }
+        } else {
+            return ResponseEntity.status(400).build();
+        }
+    }
+
+
+    @GetMapping("/perfil")
+    public ResponseEntity<User> getPerfil() {
+        // Recupera o usuário autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            User user = (User) authentication.getPrincipal();
+            return ResponseEntity.status(200).body(user);
+        } else {
+            return ResponseEntity.status(401).build(); // Não autenticado
+        }
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<User>> listaUsuarios() {
         return ResponseEntity.status(200).body(UserService.listarUsuarios());
     }
-    @PostMapping("/recuperarcodigo")
-    public ResponseEntity recuperarCodigoSenha(@RequestBody User user) {
-        return ResponseEntity.ok(UserService.usuarioSolicitarCodigo(user.getEmail()));
-    }
 
 
-//    @PutMapping("/recuperarsenha")
-//    public ResponseEntity alterarSenha(@RequestBody User user){
-//        return ResponseEntity.ok(UserService.alterarSenha(user));
+
+
+
 //
+//    @PostMapping("/recuperarcodigo")
+//    public ResponseEntity recuperarCodigoSenha(@RequestBody User user) {
+//        return ResponseEntity.ok(UserService.solicitarCodigo(user.getEmail()));
 //    }
-
-
-
+//
+//    @PostMapping("/recuperarSenha")
+//    public ResponseEntity recuperarSenha(@RequestBody User user) {
+//        return ResponseEntity.ok(UserService.alterarSenha(user));
+//    }
 
 
 

@@ -17,9 +17,10 @@ import java.util.List;
 public class CursosController {
 
 
-    private  CursosService cursosService;
-   @Autowired
+    private CursosService cursosService;
+    @Autowired
     private CursosRepository cursosRepository;
+
     @Autowired
     public CursosController(CursosService cursosService) {
         this.cursosService = cursosService;
@@ -28,7 +29,7 @@ public class CursosController {
     @PostMapping("/cadastrarCursos")
     public ResponseEntity<Cursos> cadastrarCurso(@RequestBody CursosDto cursoDTO) {
         Cursos cursos = cursosRepository.findByPlaylist(cursoDTO.getPlaylist());
-        if(cursos == null) {
+        if (cursos == null) {
             cursosService.cadastrarCursos(cursoDTO);
             return ResponseEntity.status(200).build();
         }
@@ -36,6 +37,7 @@ public class CursosController {
         return ResponseEntity.status(422).build();
 
     }
+
     @GetMapping("/{area}")
     public ResponseEntity<List<Cursos>> listaCursos(@PathVariable String area) {
         List<Cursos> cursos = cursosService.buscartCursosPorArea(area);
@@ -44,10 +46,10 @@ public class CursosController {
         } else {
             return ResponseEntity.status(204).build();
         }
-        }
-
     }
 
+
+}
 
 
 

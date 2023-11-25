@@ -20,13 +20,13 @@ public class CursosService {
 
 
     public List<Cursos> buscartCursosPorArea(String area) {
-        List <Cursos> list = repositoryCursos.findByArea(area);
+        List<Cursos> list = repositoryCursos.findByArea(area);
         return list;
     }
 
-    public Cursos cadastrarCursos(CursosDto cursosDto){
 
-        Cursos curso = new Cursos(cursosDto.getArea(), cursosDto.getDescricao(), cursosDto.getPlaylist());
+    public Cursos cadastrarCursos(CursosDto cursosDto) {
+        Cursos curso = new Cursos(cursosDto.getTitulo(), cursosDto.getArea(), cursosDto.getDescricao(), cursosDto.getPlaylist());
         return repositoryCursos.save(curso);
 
     }

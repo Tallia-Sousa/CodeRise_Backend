@@ -31,8 +31,11 @@ public class User implements UserDetails {
     private String senha;
     @Column(name = "Role")
     private UserRole roles;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecuperacaoSenha> recuperacaoSenhas = new ArrayList<>();
+//    @Column(name = "CodigoRecuperacaoSenha")
+//    private String codigorecuperacaosenha;
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "DataEnvioCodigo")
+//    private Date dataEnvioCodigo;
 
     public User(String nome, String email, String senha, UserRole role){
         this.nome = nome;

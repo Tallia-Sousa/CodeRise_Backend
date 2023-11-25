@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class CursosDto {
 
+        private String titulo;
         private String area;
         private String playlist;
         private String descricao;

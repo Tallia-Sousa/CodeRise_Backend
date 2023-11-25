@@ -14,5 +14,13 @@ public interface CursosRepository extends JpaRepository<Cursos, String> {
 
     Cursos findByid(String cursoId);
 
-    Cursos findByPlaylist(String playlist);
+
+
+    Cursos findByPlaylist(String Playlist);
+
+
+
+//    List<Cursos> findByAreaAndTitulo(String area, String titulo);
+
+
 }

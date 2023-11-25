@@ -37,9 +37,9 @@ public class TokenService {
                     .sign(algorithm);//assinatura do token
             return token;
         } catch (JWTCreationException exception) {
-           throw new RuntimeException("Error while generating token", exception);//excecao do jwt quando houver 1 parametro nao informadi
-      }
+            throw new RuntimeException("Error while generating token", exception);//excecao do jwt quando houver 1 parametro nao informadi
         }
+    }
 
 
     //validar se o token que  o usuario quer fazer uma nova req esta valido
@@ -60,20 +60,34 @@ public class TokenService {
 
     //retorna um instante do tempo: para que o token expire em 2 horas
     private Instant genExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusMinutes(1).toInstant(ZoneOffset.of("-03:00"));
     }
 
-    public boolean isTokenExpired(String token) {
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
 
-            Date expirationDate = claims.getExpiration();
-            return expirationDate.before(new Date());
-        } catch (ExpiredJwtException e) {
-            return true; // Token expirado
-        } catch (JwtException e) {
-            return false; // Token inválido
-        }}}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//    public boolean isTokenExpired(String token) {
+//        try {
+//            Claims claims = Jwts.parser()
+//                    .setSigningKey(secret)
+//                    .parseClaimsJws(token)
+//                    .getBody();
+//
+//            Date expirationDate = claims.getExpiration();
+//            return expirationDate.before(new Date());
+//        } catch (ExpiredJwtException e) {
+//            return true; // Token expirado
+//        } catch (JwtException e) {
+//            return false; // Token inválido
+//        }}}

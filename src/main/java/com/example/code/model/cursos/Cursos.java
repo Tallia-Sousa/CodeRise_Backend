@@ -24,6 +24,8 @@ public class Cursos {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "Id")
     private String id;
+    @Column(name = "Titulo",columnDefinition ="Text", nullable = false)
+     private String titulo;
     @Column(name = "Area",columnDefinition ="Text", nullable = false)
     private String area;
     @Column(name = "Descricao",columnDefinition ="Text", nullable = false, unique = true)
@@ -34,8 +36,9 @@ public class Cursos {
 
 
 
-    public Cursos(String area, String descricao, String playlist) {
 
+    public Cursos(String titulo, String area, String descricao, String playlist) {
+        this.titulo = titulo;
         this.area = area;
         this.descricao = descricao;
         this.playlist = playlist;
