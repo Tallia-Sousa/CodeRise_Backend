@@ -1,6 +1,5 @@
 package com.example.code.controllers;
 
-import com.example.code.Responses.Respostas;
 import com.example.code.model.user.*;
 //import com.example.code.repositories.RepositorySenha;
 import com.example.code.repositories.UserRepository;
@@ -52,13 +51,18 @@ public class UsersController {
 
     @PostMapping("/cadastro")
     public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data) {
-        if (this.repository.findByEmail(data.email()) != null) {
-            return ResponseEntity.status(422).build();
-        }
+        try {
+            if (this.repository.findByEmail(data.email()) != null) {
+                return ResponseEntity.status(422).build();
+            }
 
-        UserService.cadastrarUsers(data);
-        return ResponseEntity.status(201).build();
+            UserService.cadastrarUsers(data);
+            return ResponseEntity.status(201).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro durante o cadastro");
+        }
     }
+
 
 
     @PostMapping("/login")
@@ -79,6 +83,9 @@ public class UsersController {
 
     @PostMapping("/verificarToken")
     public ResponseEntity validarToken(HttpServletRequest request) {
+        try {
+
+
         String token = request.getHeader("Authorization");
 
         if (token != null && token.startsWith("Bearer ")) {
@@ -92,6 +99,9 @@ public class UsersController {
             }
         } else {
             return ResponseEntity.status(400).build();
+        }}
+        catch (Exception e){
+            return ResponseEntity.status(500).build();
         }
     }
 
@@ -117,17 +127,6 @@ public class UsersController {
 
 
 
-
-//
-//    @PostMapping("/recuperarcodigo")
-//    public ResponseEntity recuperarCodigoSenha(@RequestBody User user) {
-//        return ResponseEntity.ok(UserService.solicitarCodigo(user.getEmail()));
-//    }
-//
-//    @PostMapping("/recuperarSenha")
-//    public ResponseEntity recuperarSenha(@RequestBody User user) {
-//        return ResponseEntity.ok(UserService.alterarSenha(user));
-//    }
 
 
 

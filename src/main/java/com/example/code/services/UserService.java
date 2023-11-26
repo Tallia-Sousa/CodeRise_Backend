@@ -1,6 +1,6 @@
 package com.example.code.services;
 
-import com.example.code.Responses.Respostas;
+
 import com.example.code.model.user.*;
 //import com.example.code.repositories.RepositorySenha;
 
@@ -24,13 +24,13 @@ public class UserService {
 
     private UserRepository repository;
 
-    private EmailService emailService;
+
 
 
     @Autowired
-    public UserService(UserRepository repository, EmailService emailService) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
-        this.emailService = emailService;
+
     }
 
     public User cadastrarUsers(CadastroDTO data) {
@@ -53,62 +53,6 @@ public class UserService {
         repository.deleteById(id);
         return true;
     }
-
-
-//
-//    public String solicitarCodigo(String email) {
-//        User user = (User) repository.findByEmail(email);
-//
-//        if (user != null) {
-//            user.setCodigorecuperacaosenha(codigoRecuperacao(user.getId()));
-//            user.setDataEnvioCodigo(new Date());
-//            repository.save(user);
-//
-//            // Enviar e-mail de recuperação de senha
-//            emailService.sendEmail(user.getEmail(), "Código de Recuperação de senha",
-//                    "Seu codigo de recuperaçao de senha a seguir: " + user.getCodigorecuperacaosenha());
-//
-//            return "Código enviado com sucesso";
-//        } else {
-//            return "Usuário não encontrado";
-//        }
-//    }
-//
-//    private String codigoRecuperacao(String id) {
-//
-//        DateFormat format = new SimpleDateFormat("ddMMyyyyHHmmssmm");
-//
-//        return format.format(new Date()) + id;
-//
-//    }
-//
-//
-//
-//
-//
-//    public Respostas alterarSenha(User user){
-//        User usuarioN = repository.findByEmailAndCodigorecuperacaosenha(user.getEmail(), user.getCodigorecuperacaosenha());
-//        if(usuarioN != null){
-//            Date diferenca = new Date(new Date().getTime() - usuarioN.getDataEnvioCodigo().getTime());
-//            if(diferenca.getTime() / 1000 < 900){// depois de 15 min apos receber o cod ele expira
-//                String esconder = new BCryptPasswordEncoder().encode(user.getSenha());//encriptografar
-//                usuarioN.setSenha(esconder);
-//                usuarioN.setCodigorecuperacaosenha(null); // se tentar recuperar novamente nao vai ser encontrado
-//                repository.save(usuarioN);
-//                return new Respostas("Senha alterada com sucesso", 200);
-//            } else {
-//                return new Respostas("Tempo expirado, solicite um novo codigo",401);
-//            }}
-//        else {
-//          return   new Respostas( "email ou codigo nao encontados", 204);
-//        }
-//
-//    }// depois arumar com base no user msm
-////
-//
-
-
-
 
 }
 
