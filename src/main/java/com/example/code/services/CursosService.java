@@ -24,6 +24,12 @@ public class CursosService {
         return list;
     }
 
+    public boolean removerCursos(String id){
+         repositoryCursos.deleteById(id);
+         return true;
+
+
+    }
 
     public Cursos cadastrarCursos(CursosDto cursosDto) {
         Cursos curso = new Cursos(cursosDto.getTitulo(), cursosDto.getArea(), cursosDto.getDescricao(), cursosDto.getPlaylist());

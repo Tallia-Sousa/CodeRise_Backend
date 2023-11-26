@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/list").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/cursos/cadastrarcursos").hasRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.DELETE, "/cursos/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)//antes que caia nos filtros acima

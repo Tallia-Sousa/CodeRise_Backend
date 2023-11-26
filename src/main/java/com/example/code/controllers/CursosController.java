@@ -49,6 +49,14 @@ public class CursosController {
     }
 
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCursos(@PathVariable String id){
+
+        cursosService.removerCursos(id);
+
+       return  ResponseEntity.status(204).build();
+    }
+
 }
 
 
