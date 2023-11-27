@@ -57,6 +57,16 @@ public class CursosController {
        return  ResponseEntity.status(204).build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Cursos> editarCurso(@PathVariable String id, @RequestBody CursosDto cursosDto) {
+        try {
+            Cursos cursoAtualizado = cursosService.editarCursos(id, cursosDto);
+            return ResponseEntity.ok(cursoAtualizado);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
 
 

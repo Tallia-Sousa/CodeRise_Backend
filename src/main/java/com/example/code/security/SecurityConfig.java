@@ -40,12 +40,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/cadastro").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/recuperarcodigo").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/codigoRecuperacao").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/list").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/cursos/cadastrarcursos").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/cursos/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/cursos/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)//antes que caia nos filtros acima
