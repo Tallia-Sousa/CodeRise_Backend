@@ -58,7 +58,7 @@ public class TokenService {
 
     }
 
-    //retorna um instante do tempo: para que o token expire em 2 horas
+    //retorna um instante do tempo: para que o token expire em 4 horas
     private Instant genExpirationDate() {
         return LocalDateTime.now().plusHours(4).toInstant(ZoneOffset.of("-03:00"));
     }
