@@ -48,6 +48,8 @@ public class UsersController {
     @Autowired
     private AuthorizationService authorizationService;
 
+    //mudando de novogit a
+
 
     @PostMapping("/cadastro")
     public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data) {
