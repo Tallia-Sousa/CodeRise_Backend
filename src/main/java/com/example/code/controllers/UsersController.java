@@ -1,8 +1,12 @@
 package com.example.code.controllers;
 
+import com.example.code.model.sugestoes.SugestaoDto;
+import com.example.code.model.sugestoes.SugestaoUser;
 import com.example.code.model.user.*;
 //import com.example.code.repositories.RepositorySenha;
+import com.example.code.repositories.RepositorySugestoes;
 import com.example.code.repositories.UserRepository;
+import com.example.code.respostas.Respostas;
 import com.example.code.services.AuthorizationService;
 import com.example.code.services.TokenService;
 import com.example.code.services.UserService;
@@ -39,7 +43,6 @@ public class UsersController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository repository;
-
     @Autowired
     private UserService UserService;
 
@@ -84,8 +87,6 @@ public class UsersController {
     @PostMapping("/verificarToken")
     public ResponseEntity validarToken(HttpServletRequest request) {
         try {
-
-
         String token = request.getHeader("Authorization");
 
         if (token != null && token.startsWith("Bearer ")) {
@@ -104,10 +105,31 @@ public class UsersController {
             return ResponseEntity.status(500).build();
         }
     }
+    @PostMapping("/sugestoes")
+    public ResponseEntity sugestaoUser(@RequestBody @Valid SugestaoDto sugestaoDto) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+                User user = (User) authentication.getPrincipal();
+                String idDoUsuarioAutenticado = user.getId();
+                Respostas respostas = UserService.SugestaoUser(idDoUsuarioAutenticado, sugestaoDto);
+
+                if (respostas.getStatus() == 200) {
+                    return ResponseEntity.status(204).build();
+                } else if (respostas.getStatus() == 422) {
+                    return ResponseEntity.status(422).build();
+                }
+            }
+            return ResponseEntity.status(401).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
     @GetMapping("/perfil")
     public ResponseEntity<User> getPerfil() {
+        try{
         // Recupera o usuário autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -117,15 +139,15 @@ public class UsersController {
         } else {
             return ResponseEntity.status(401).build(); // Não autenticado
         }
+    }catch (Exception e){
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<User>> listaUsuarios() {
         return ResponseEntity.status(200).body(UserService.listarUsuarios());
     }
-
-
-
 
 
 

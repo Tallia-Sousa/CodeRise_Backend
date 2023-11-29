@@ -70,11 +70,15 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedHeader("*");
+//        config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addAllowedOrigin("*");
+        config.addAllowedHeader("Content-Type");
+        config.addAllowedHeader("Accept");
+        config.addAllowedHeader("Authorization");
 
-        source.registerCorsConfiguration("/**", config);
+
+       source.registerCorsConfiguration("/**", config);
         return source;
     }
     @Bean

@@ -2,6 +2,7 @@ package com.example.code.model.user;
 //
 //import com.example.code.model.favoritar.Favoritar;
 import com.example.code.model.cursos.Cursos;
+import com.example.code.model.sugestoes.SugestaoUser;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,11 +32,8 @@ public class User implements UserDetails {
     private String senha;
     @Column(name = "Role")
     private UserRole roles;
-//    @Column(name = "CodigoRecuperacaoSenha")
-//    private String codigorecuperacaosenha;
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "DataEnvioCodigo")
-//    private Date dataEnvioCodigo;
+    @OneToMany(mappedBy = "user")
+    private List<SugestaoUser> sugestaoUsers = new ArrayList<>();
 
     public User(String nome, String email, String senha, UserRole role){
         this.nome = nome;
