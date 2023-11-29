@@ -32,8 +32,8 @@ public class User implements UserDetails {
     private String senha;
     @Column(name = "Role")
     private UserRole roles;
-    @OneToMany(mappedBy = "user")
-    private List<SugestaoUser> sugestaoUsers = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+//    private List<SugestaoUser> sugestaoUsers = new ArrayList<>();
 
     public User(String nome, String email, String senha, UserRole role){
         this.nome = nome;

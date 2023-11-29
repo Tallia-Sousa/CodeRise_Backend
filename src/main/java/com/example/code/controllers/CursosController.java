@@ -75,25 +75,25 @@ public class CursosController {
         }
     }
 
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-        //// Criar um mapa para armazenar mensagens de erro de validação.
-        Map<String, String> erros = new HashMap<>();
-        // Obtém todos os erros de validação associados à exceção.
-        ex.getBindingResult().getAllErrors().forEach((error) ->{
-            // Obtém o nome do campo que causou o erro.
-            String fieldname =((FieldError)error).getField();
-            // Obtém mensagem de  o erro.
-            String errorMessage =error.getDefaultMessage();
-
-            // envia para o mapa e faz comparações com
-            erros.put(fieldname, errorMessage);
-        });
-//        retorna o erro
-        return erros;
-    }
+//
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
+//        //// Criar um mapa para armazenar mensagens de erro de validação.
+//        Map<String, String> erros = new HashMap<>();
+//        // Obtém todos os erros de validação associados à exceção.
+//        ex.getBindingResult().getAllErrors().forEach((error) ->{
+//            // Obtém o nome do campo que causou o erro.
+//            String fieldname =((FieldError)error).getField();
+//            // Obtém mensagem de  o erro.
+//            String errorMessage =error.getDefaultMessage();
+//
+//            // envia para o mapa e faz comparações com
+//            erros.put(fieldname, errorMessage);
+//        });
+////        retorna o erro
+//        return erros;
+//    }
 
 
 
