@@ -107,27 +107,27 @@ public class UsersController {
             return ResponseEntity.status(500).build();
         }
     }
-//    @PostMapping("/sugestoes")
-//    public ResponseEntity sugestaoUser(@RequestBody @Valid SugestaoDto sugestaoDto) {
-//        try {
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-//                User user = (User) authentication.getPrincipal();
-//                String idDoUsuarioAutenticado = user.getId();
-//                Respostas respostas = UserService.SugestaoUser(idDoUsuarioAutenticado, sugestaoDto);
-//
-//                if (respostas.getStatus() == 200) {
-//                    return ResponseEntity.status(204).build();
-//                } else if (respostas.getStatus() == 422) {
-//                    return ResponseEntity.status(422).build();
-//                }
-//            }
-//            return ResponseEntity.status(401).build();
-//        } catch (Exception e) {
-//            return ResponseEntity.status(500).build();
-//        }
-//    }
+    @PostMapping("/sugestoes")
+    public ResponseEntity sugestaoUser(@RequestBody @Valid SugestaoDto sugestaoDto) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+                User user = (User) authentication.getPrincipal();
+                String idDoUsuarioAutenticado = user.getId();
+                Respostas respostas = UserService.SugestaoUser(idDoUsuarioAutenticado, sugestaoDto);
+
+                if (respostas.getStatus() == 200) {
+                    return ResponseEntity.status(204).build();
+                } else if (respostas.getStatus() == 422) {
+                    return ResponseEntity.status(422).build();
+                }
+            }
+            return ResponseEntity.status(401).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
     @GetMapping("/perfil")
     public ResponseEntity<User> getPerfil() {
