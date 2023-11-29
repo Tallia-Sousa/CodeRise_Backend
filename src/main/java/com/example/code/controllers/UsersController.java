@@ -129,7 +129,7 @@ public class UsersController {
 
     @GetMapping("/perfil")
     public ResponseEntity<User> getPerfil() {
-        try{
+
         // Recupera o usuário autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -139,9 +139,7 @@ public class UsersController {
         } else {
             return ResponseEntity.status(401).build(); // Não autenticado
         }
-    }catch (Exception e){
-            return ResponseEntity.status(500).build();
-        }
+
     }
 
     @GetMapping("/list")
