@@ -1,22 +1,20 @@
 package com.example.code.services;
 
 
+import com.example.code.model.sugestoes.SugestaoDto;
+import com.example.code.model.sugestoes.SugestaoUser;
 import com.example.code.model.user.*;
 //import com.example.code.repositories.RepositorySenha;
 
+import com.example.code.repositories.RepositorySugestoes;
 import com.example.code.repositories.UserRepository;
+import com.example.code.respostas.Respostas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -25,11 +23,13 @@ public class UserService {
     private UserRepository repository;
 
 
+    private RepositorySugestoes repositorySugestoes;
 
 
     @Autowired
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, RepositorySugestoes repositorySugestoes) {
         this.repository = repository;
+        this.repositorySugestoes = repositorySugestoes;
 
     }
 
@@ -54,7 +54,26 @@ public class UserService {
         return true;
     }
 
+    public Respostas SugestaoUser(String id, SugestaoDto sugestaoDto) {
+        Optional<User> userOptional = repository.findById(id);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            String linkPlaylist = sugestaoDto.getLinkPlaylist();
+            SugestaoUser linkJaExiste = repositorySugestoes.findByLinkPlaylist(linkPlaylist);
+            if (linkJaExiste == null)    {
+                SugestaoUser sugestaoUser = new SugestaoUser(user, sugestaoDto.getAutorPlaylist(),
+                        sugestaoDto.getAreaPlaylist(), sugestaoDto.getLinkPlaylist());
+                repositorySugestoes.save(sugestaoUser);
+                return new Respostas("sugestao enviada com sucesso", 200);
+            }
+            return new Respostas("Essa sugestao ja existe na nossa base de dados", 422);
+        }
+
+        return new Respostas("id nao encontrado", 401);
+    }
 }
+
 
 
 

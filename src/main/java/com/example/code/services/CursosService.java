@@ -31,7 +31,11 @@ public class CursosService {
 
         if(curso.isPresent()){
             Cursos cursos = curso.get();
+            cursos.setTitulo(cursos.getTitulo());
+            cursos.setArea(cursos.getArea());
             cursos.setPlaylist(cursosDto.getPlaylist());
+            cursos.setAutorPlaylist(cursosDto.getAutorPlaylist());
+            cursosDto.setDescricao(cursos.getDescricao());
             return repositoryCursos.save(cursos);
 
         }
@@ -48,7 +52,8 @@ public class CursosService {
     }
 
     public Cursos cadastrarCursos(CursosDto cursosDto) {
-        Cursos curso = new Cursos(cursosDto.getTitulo(), cursosDto.getArea(), cursosDto.getDescricao(), cursosDto.getPlaylist());
+        Cursos curso = new Cursos(cursosDto.getTitulo(), cursosDto.getArea(),
+                cursosDto.getDescricao(), cursosDto.getPlaylist(), cursosDto.getAutorPlaylist());
         return repositoryCursos.save(curso);
 
     }

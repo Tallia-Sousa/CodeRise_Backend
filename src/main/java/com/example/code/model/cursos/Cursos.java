@@ -30,18 +30,21 @@ public class Cursos {
     private String area;
     @Column(name = "Descricao",columnDefinition ="Text", nullable = false, unique = true)
     private String descricao;
-    @Column(name = "Playlist",  length = 200, columnDefinition ="VARCHAR(200)", nullable = false, unique = true)
+    @Column(name = "Playlist",  length = 200, columnDefinition ="VARCHAR(255)", nullable = false, unique = true)
     private String playlist;
+    @Column(name = "AutorPlaylist",columnDefinition ="Text", nullable = false)
+    private String autorPlaylist;
 
 
 
 
 
-    public Cursos(String titulo, String area, String descricao, String playlist) {
+    public Cursos(String titulo, String area, String descricao, String playlist, String autorPlaylist) {
         this.titulo = titulo;
         this.area = area;
         this.descricao = descricao;
         this.playlist = playlist;
+        this.autorPlaylist = autorPlaylist;
 
     }
 }

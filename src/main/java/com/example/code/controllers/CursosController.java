@@ -5,12 +5,18 @@ import com.example.code.model.cursos.Cursos;
 import com.example.code.model.cursos.CursosDto;
 import com.example.code.repositories.CursosRepository;
 import com.example.code.services.CursosService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/cursos")
@@ -20,31 +26,34 @@ public class CursosController {
     private CursosService cursosService;
     @Autowired
     private CursosRepository cursosRepository;
-
     @Autowired
     public CursosController(CursosService cursosService) {
         this.cursosService = cursosService;
     }
 
     @PostMapping("/cadastrarCursos")
-    public ResponseEntity<Cursos> cadastrarCurso(@RequestBody CursosDto cursoDTO) {
+    public ResponseEntity<Cursos> cadastrarCurso(@RequestBody @Valid CursosDto cursoDTO) {
         Cursos cursos = cursosRepository.findByPlaylist(cursoDTO.getPlaylist());
         if (cursos == null) {
             cursosService.cadastrarCursos(cursoDTO);
             return ResponseEntity.status(200).build();
         }
-
         return ResponseEntity.status(422).build();
 
     }
 
     @GetMapping("/{area}")
     public ResponseEntity<List<Cursos>> listaCursos(@PathVariable String area) {
-        List<Cursos> cursos = cursosService.buscartCursosPorArea(area);
-        if (cursos != null && !cursos.isEmpty()) {
-            return ResponseEntity.status(200).body(cursos);
-        } else {
-            return ResponseEntity.status(204).build();
+        try {
+            List<Cursos> cursos = cursosService.buscartCursosPorArea(area);
+            if (cursos != null && !cursos.isEmpty()) {
+                return ResponseEntity.status(200).body(cursos);
+            } else {
+                return ResponseEntity.status(404).build();
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).build();
         }
     }
 
@@ -52,20 +61,41 @@ public class CursosController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteCursos(@PathVariable String id){
 
-        cursosService.removerCursos(id);
-
-       return  ResponseEntity.status(204).build();
+         cursosService.removerCursos(id);
+         return ResponseEntity.status(204).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cursos> editarCurso(@PathVariable String id, @RequestBody CursosDto cursosDto) {
+    public ResponseEntity<Cursos> editarCurso( @PathVariable String id, @RequestBody @Valid CursosDto cursosDto) {
         try {
-            Cursos cursoAtualizado = cursosService.editarCursos(id, cursosDto);
-            return ResponseEntity.ok(cursoAtualizado);
+            Cursos curso= cursosService.editarCursos(id, cursosDto);
+            return ResponseEntity.ok(curso);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
+        //// Criar um mapa para armazenar mensagens de erro de validação.
+        Map<String, String> erros = new HashMap<>();
+        // Obtém todos os erros de validação associados à exceção.
+        ex.getBindingResult().getAllErrors().forEach((error) ->{
+            // Obtém o nome do campo que causou o erro.
+            String fieldname =((FieldError)error).getField();
+            // Obtém mensagem de  o erro.
+            String errorMessage =error.getDefaultMessage();
+
+            // envia para o mapa e faz comparações com
+            erros.put(fieldname, errorMessage);
+        });
+//        retorna o erro
+        return erros;
+    }
+
+
 
 }
 
