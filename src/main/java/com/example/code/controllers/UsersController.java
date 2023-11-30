@@ -1,10 +1,10 @@
 package com.example.code.controllers;
 
 import com.example.code.model.sugestoes.SugestaoDto;
-import com.example.code.model.sugestoes.SugestaoUser;
+
 import com.example.code.model.user.*;
 //import com.example.code.repositories.RepositorySenha;
-import com.example.code.repositories.RepositorySugestoes;
+
 import com.example.code.repositories.UserRepository;
 import com.example.code.respostas.Respostas;
 import com.example.code.services.AuthorizationService;
@@ -13,9 +13,7 @@ import com.example.code.services.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -130,14 +128,15 @@ public class UsersController {
     }
 
     @GetMapping("/perfil")
-    public ResponseEntity<User> getPerfil() {
+    public ResponseEntity getPerfil() {
 
         // Recupera o usuário autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             User user = (User) authentication.getPrincipal();
-            return ResponseEntity.status(200).body(user);
+//
+            return ResponseEntity.status(200).body(user.getNome());
         } else {
             return ResponseEntity.status(401).build(); // Não autenticado
         }

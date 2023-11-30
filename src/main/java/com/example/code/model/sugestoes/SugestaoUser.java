@@ -20,7 +20,7 @@ public class SugestaoUser {
     @Column(name = "Id")
     private String id;
     @ManyToOne
-    @JoinColumn(name = "user_id") //  muitas sugestao pode estar associadas a uma única instância da entidade User
+    @JoinColumn(name = "user_id") //  muitas sugestoes podem estar associadas a uma única instância da entidade User
     private User user;
     @Column(name = "autorPlaylist")
     private String autorPlaylist;

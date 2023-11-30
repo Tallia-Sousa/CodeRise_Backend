@@ -1,6 +1,6 @@
 package com.example.code.model.sugestoes;
 
-import com.example.code.repositories.RepositorySugestoes;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

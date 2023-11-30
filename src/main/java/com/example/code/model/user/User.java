@@ -2,6 +2,7 @@ package com.example.code.model.user;
 //
 //import com.example.code.model.favoritar.Favoritar;
 import com.example.code.model.cursos.Cursos;
+
 import com.example.code.model.sugestoes.SugestaoUser;
 import jakarta.persistence.*;
 import lombok.*;
