@@ -96,7 +96,7 @@ public class UsersController {
             if (!resultadoValidacao.isEmpty()) {
                 return ResponseEntity.ok().build();
             } else {
-                return ResponseEntity.status(403).build();
+                return ResponseEntity.status(401).build();
             }
         } else {
             return ResponseEntity.status(400).build();
@@ -116,7 +116,7 @@ public class UsersController {
                 Respostas respostas = UserService.SugestaoUser(idDoUsuarioAutenticado, sugestaoDto);
 
                 if (respostas.getStatus() == 200) {
-                    return ResponseEntity.status(204).build();
+                    return ResponseEntity.status(200).build();
                 } else if (respostas.getStatus() == 422) {
                     return ResponseEntity.status(422).build();
                 }
@@ -126,6 +126,32 @@ public class UsersController {
             return ResponseEntity.status(500).build();
         }
     }
+
+    @PostMapping ("/verificarTokenExpirado")
+    public ResponseEntity verificarTokenExpirado(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("Authorization");
+
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7).trim(); // Remove o prefixo 'Bearer ' e espaços em branco do token
+
+                // Aqui, verifique se o token expirou/
+                if (tokenService.isTokenExpired(token)) {
+                    return ResponseEntity.status(401).build();
+                } else {
+                    return ResponseEntity.ok("Tokennao esta xpirado");
+                }
+            } else {
+                return ResponseEntity.status(400).body("Token não fornecido");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro ao verificar o token");
+        }
+    }
+
+
+
+
 
     @GetMapping("/perfil")
     public ResponseEntity getPerfil() {

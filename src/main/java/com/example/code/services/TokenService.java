@@ -58,6 +58,20 @@ public class TokenService {
 
     }
 
+    public boolean isTokenExpired(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("CodeRise")
+                    .build();
+            verifier.verify(token);
+            return false; // Token não está expirado
+        } catch (JWTVerificationException exception) {
+            // Token expirado
+            return true;
+        }
+    }
+
 
     private Instant genExpirationDate() {
         return LocalDateTime.now().plusHours(4).toInstant(ZoneOffset.of("-03:00"));

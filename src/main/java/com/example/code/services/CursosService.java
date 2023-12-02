@@ -31,11 +31,11 @@ public class CursosService {
 
         if(curso.isPresent()){
             Cursos cursos = curso.get();
-            cursos.setTitulo(cursos.getTitulo());
-            cursos.setArea(cursos.getArea());
+            cursos.setTitulo(cursosDto.getTitulo());
+            cursos.setArea(cursosDto.getArea());
             cursos.setPlaylist(cursosDto.getPlaylist());
             cursos.setAutorPlaylist(cursosDto.getAutorPlaylist());
-            cursosDto.setDescricao(cursos.getDescricao());
+            cursosDto.setDescricao(cursosDto.getDescricao());
             return repositoryCursos.save(cursos);
 
         }
