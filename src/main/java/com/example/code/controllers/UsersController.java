@@ -69,7 +69,7 @@ public class UsersController {
 
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AutenticarDTO data, HttpServletResponse response) {
+    public ResponseEntity login(@RequestBody @Valid AutenticarDTO data) {
         try {
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
             var auth = this.authenticationManager.authenticate(usernamePassword);//verifica se as credenciais
