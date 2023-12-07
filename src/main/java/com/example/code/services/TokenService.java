@@ -37,7 +37,7 @@ public class TokenService {
                     .sign(algorithm);//assinatura do token
             return token;
         } catch (JWTCreationException exception) {
-            throw new RuntimeException("Error while generating token", exception);//excecao do jwt quando houver 1 parametro nao informadi
+            throw new RuntimeException("Error while generating token", exception);
         }
     }
 
@@ -52,25 +52,12 @@ public class TokenService {
                     .verify(token)
                     .getSubject();//pega  o user e verifica se o token passado é valido e foi stm que gerou
         } catch (JWTVerificationException exception) {
-            // se retornar isso pq o token expirou ou pq o token é invalido
+
             return "";
         }
 
     }
 
-    public boolean isTokenExpired(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("CodeRise")
-                    .build();
-            verifier.verify(token);
-            return false; // Token não está expirado
-        } catch (JWTVerificationException exception) {
-            // Token expirado
-            return true;
-        }
-    }
 
 
     private Instant genExpirationDate() {

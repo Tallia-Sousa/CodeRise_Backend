@@ -75,63 +75,27 @@ public class CursosController {
         }
     }
 
-//
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-//        //// Criar um mapa para armazenar mensagens de erro de validação.
-//        Map<String, String> erros = new HashMap<>();
-//        // Obtém todos os erros de validação associados à exceção.
-//        ex.getBindingResult().getAllErrors().forEach((error) ->{
-//            // Obtém o nome do campo que causou o erro.
-//            String fieldname =((FieldError)error).getField();
-//            // Obtém mensagem de  o erro.
-//            String errorMessage =error.getDefaultMessage();
-//
-//            // envia para o mapa e faz comparações com
-//            erros.put(fieldname, errorMessage);
-//        });
-////        retorna o erro
-//        return erros;
-//    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
+        //// Criar um mapa para armazenar mensagens de erro de validação.
+        Map<String, String> erros = new HashMap<>();
+        // Obtém todos os erros de validação associados à exceção.
+        ex.getBindingResult().getAllErrors().forEach((error) ->{
+            // Obtém o nome do campo que causou o erro.
+            String fieldname =((FieldError)error).getField();
+            // Obtém mensagem de  o erro.
+            String errorMessage =error.getDefaultMessage();
+
+            // envia para o mapa e faz comparações com
+            erros.put(fieldname, errorMessage);
+        });
+//        retorna o erro
+        return erros;
+    }
 
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public ResponseEntity<List<CursosDto>> getCursosPorArea(@PathVariable String area) {
-//
-//        List<Cursos> cursos = cursosService.buscartCursosPorArea(area);
-//        List<CursosDto> cursosDTO = new ArrayList<>();
-//
-//        if (cursos.isEmpty()) {
-//            return ResponseEntity.status(204).build();
-//        }
-//
-//        for (Cursos curso : cursos) {
-//            CursosDto cursoDTO = new CursosDto();
-//            cursoDTO.setArea(curso.getArea());
-//            cursoDTO.setDescricao(curso.getDescricao());
-//            cursoDTO.setComunidades(curso.getComunidades());
-//            cursoDTO.setLinksPdf(curso.getLinksPdf());
-//            cursoDTO.setVideos(curso.getVideos());
-//            cursosDTO.add(cursoDTO);
-//        }
-//        return ResponseEntity.ok(cursosDTO);
-//    }
 

@@ -127,29 +127,6 @@ public class UsersController {
         }
     }
 
-    @PostMapping ("/verificarTokenExpirado")
-    public ResponseEntity verificarTokenExpirado(HttpServletRequest request) {
-        try {
-            String token = request.getHeader("Authorization");
-
-            if (token != null && token.startsWith("Bearer ")) {
-                token = token.substring(7).trim(); // Remove o prefixo 'Bearer ' e espaços em branco do token
-
-                // Aqui, verifique se o token expirou/
-                if (tokenService.isTokenExpired(token)) {
-                    return ResponseEntity.status(401).build();
-                } else {
-                    return ResponseEntity.ok("Tokennao esta xpirado");
-                }
-            } else {
-                return ResponseEntity.status(400).body("Token não fornecido");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erro ao verificar o token");
-        }
-    }
-
-
 
 
 
@@ -173,7 +150,7 @@ public class UsersController {
 
     ///e esse aqui o oficial
     @GetMapping("/list")
-    public ResponseEntity<List<User>> listaUsuarios() {
+    public ResponseEntity<List<User>> listarUsuarios() {
         return ResponseEntity.status(200).body(UserService.listarUsuarios());
     }
 

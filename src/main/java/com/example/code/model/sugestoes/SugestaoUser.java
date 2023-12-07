@@ -2,6 +2,7 @@ package com.example.code.model.sugestoes;
 
 import com.example.code.model.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

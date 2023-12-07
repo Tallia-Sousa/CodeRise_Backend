@@ -20,7 +20,6 @@ public interface CursosRepository extends JpaRepository<Cursos, String> {
 
 
 
-//    List<Cursos> findByAreaAndTitulo(String area, String titulo);
 
 
 }
