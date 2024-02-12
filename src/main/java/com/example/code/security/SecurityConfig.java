@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/cadastro").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/password-reset/esquecerSenha").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/password-reset/atualizar").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/list").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/cursos/cadastrarcursos").hasRole("ADMIN")
