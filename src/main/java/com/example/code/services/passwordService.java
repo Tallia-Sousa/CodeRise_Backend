@@ -39,20 +39,34 @@ public class passwordService {
         repositoryPassword.save(reset);
     }
 
-    public void enviarEmail(String email) throws Exception {
-        //verifica se o user existe
+    public ResetPassword buscarToken(User user) {
+        return repositoryPassword.findByUser(user);
+    }
+
+    public Respostas enviarEmail(String email) throws Exception {
         User user = (User) repositoryUser.findByEmail(email);
 
         if (user == null || user.getEmail() == null) {
-            throw new Exception("Usuario invalido");
+            return new Respostas(400); // Retorna código de resposta 400 indicando solicitação malformada
         }
-        //gera o token
+
+        if (buscarToken(user) != null) {
+            return new Respostas(422); // Retorna código de resposta 422 indicando solicitação já enviada
+        }
+
+        // Gera o token
         String token = UUID.randomUUID().toString();
-        //chama o metodo que cria e associa o token ao usuario
+
+        // Chama o método que cria e associa o token ao usuário
         criarToken(user, token);
-        //envia o token pro user
+
+        // Envia o token para o usuário
         emailService.enviarEmail(user.getEmail(), token);
+
+        // Retorna código de resposta 200 indicando sucesso
+        return new Respostas(200);
     }
+
 
     public void atualizarSenha(String token, String email, String senha ) throws MessagingException {
         // Busca o token de redefinição na base de dados

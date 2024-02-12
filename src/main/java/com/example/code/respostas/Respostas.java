@@ -17,4 +17,8 @@ public class Respostas {
         this.status = status;
     }
 
+    public Respostas(int status){
+        this.status = status;
+    }
+
 }
