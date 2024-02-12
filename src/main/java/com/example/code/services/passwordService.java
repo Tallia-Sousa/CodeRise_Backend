@@ -47,11 +47,12 @@ public class passwordService {
         User user = (User) repositoryUser.findByEmail(email);
 
         if (user == null || user.getEmail() == null) {
-            return new Respostas(400); // Retorna código de resposta 400 indicando solicitação malformada
+            return new Respostas(400);
         }
 
+         //ver se o user ja  possui um token
         if (buscarToken(user) != null) {
-            return new Respostas(422); // Retorna código de resposta 422 indicando solicitação já enviada
+            return new Respostas(422);
         }
 
         // Gera o token
