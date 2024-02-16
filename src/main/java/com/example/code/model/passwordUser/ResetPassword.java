@@ -41,7 +41,6 @@ public class ResetPassword {
     private LocalDateTime dataExpiracao(final long expiracaoEmMilissegundos) {
         LocalDateTime localDateAtual = LocalDateTime.now();
 
-
         LocalDateTime dateExpiracao = localDateAtual.plusSeconds(expiracaoEmMilissegundos / 1000);
 
         return dateExpiracao;

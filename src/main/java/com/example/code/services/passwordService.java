@@ -71,13 +71,7 @@ public class passwordService {
         // Retorna código de resposta 200 indicando sucesso
         return new Respostas(200);
     }
-    public Boolean dataExpirou(LocalDateTime dataExpiracao){
 
-        LocalDateTime agora = LocalDateTime.now();
-
-        // Verifica se a data de expiração já passou
-        return agora.isAfter(dataExpiracao);
-    }
 
 
     public void atualizarSenha(String token, String email, String senha ) throws MessagingException {
