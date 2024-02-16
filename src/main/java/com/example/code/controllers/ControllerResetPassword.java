@@ -51,6 +51,10 @@ public class ControllerResetPassword {
         return  ResponseEntity.status(200).build();
 
         } catch (MessagingException e) {
-            return ResponseEntity.status(400).build();
+
+            Map<String, String> response = new HashMap<>();
+
+            response.put("message",e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }}

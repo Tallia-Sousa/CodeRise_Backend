@@ -8,16 +8,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
 @Getter
 @Setter
 @Table(name = "password_reset_tokens")
 public class ResetPassword {
-    private static final int expiracao = 60 * 15; //15 minutos de expiraçao
+    private static final long expiracao = 2 * 60 * 1000;
+    private static final String FORMATO_DATA = "dd/MM/yyyy HH:mm:ss";
 
 
     @Id
@@ -27,27 +29,24 @@ public class ResetPassword {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false , name = "userId")
     private User user;
-    private Date dateExpiry;
+    private LocalDateTime dateExpiry;
 
-    public ResetPassword(String token, User user) {
-        this.token = token;
-        this.user = user;
-        this.dateExpiry = dataExpiracao(expiracao);
+
+    public ResetPassword() {
+        this.dateExpiry =  dataExpiracao(expiracao);
     }
 
 
 
+    private LocalDateTime dataExpiracao(final long expiracaoEmMilissegundos) {
+        LocalDateTime localDateAtual = LocalDateTime.now();
 
-    private Date dataExpiracao(final int expiracao){
-        //intancia a classe
-        Calendar calendario = Calendar.getInstance();
-        //define o tempo atual como temp do calendario
-        calendario.setTimeInMillis(new Date().getTime());
-        //adiciona a quantidade de minutos especificada pela variável expiracao
-        calendario.add(calendario.MINUTE, expiracao);
-        //retorna a data de expiraçao em minutos
-        return new Date(calendario.getTime().getTime());
+// Adicionar o tempo de expiração em milissegundos
+        LocalDateTime dateExpiracao = localDateAtual.plusSeconds(expiracaoEmMilissegundos / 1000);
+
+        return dateExpiracao;
 
 
     }
+
 }
