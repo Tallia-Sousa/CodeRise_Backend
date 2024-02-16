@@ -19,7 +19,7 @@ import java.util.Date;
 @Table(name = "password_reset_tokens")
 public class ResetPassword {
     private static final long expiracao = 2 * 60 * 1000;
-    private static final String FORMATO_DATA = "dd/MM/yyyy HH:mm:ss";
+
 
 
     @Id
@@ -41,7 +41,7 @@ public class ResetPassword {
     private LocalDateTime dataExpiracao(final long expiracaoEmMilissegundos) {
         LocalDateTime localDateAtual = LocalDateTime.now();
 
-// Adicionar o tempo de expiração em milissegundos
+
         LocalDateTime dateExpiracao = localDateAtual.plusSeconds(expiracaoEmMilissegundos / 1000);
 
         return dateExpiracao;
