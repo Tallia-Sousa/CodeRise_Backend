@@ -43,14 +43,10 @@ public class UsersController {
     private UserRepository repository;
     @Autowired
     private UserService UserService;
-
     @Autowired
     private TokenService tokenService;
     @Autowired
     private AuthorizationService authorizationService;
-
-    //mudando de novogit a
-
 
     @PostMapping("/cadastro")
     public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data) {
