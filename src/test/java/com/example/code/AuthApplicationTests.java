@@ -16,6 +16,9 @@ class AuthApplicationTests {
 	@Autowired
 	private WebTestClient webTestClient;
 
+
+
+//testes para cada cenario no cadastro
 	@Test
 	void testSuccessCadastro() {
 
@@ -28,7 +31,7 @@ class AuthApplicationTests {
 	}
 
 	@Test
-	void testErrorCadastro(){
+	void testErrorCampoVazioCadastro(){
 
 		var user = new User("", "", "", UserRole.USER);
 		webTestClient
@@ -37,6 +40,18 @@ class AuthApplicationTests {
 				.bodyValue(user)
 				.exchange()
 				.expectStatus().isBadRequest();
+	}
+
+
+	@Test
+	void testErrorCadastroEmailIguais(){
+		var user = new User("tallia", "tallia@gmail.com", "1307", UserRole.USER);
+
+		webTestClient.post()
+				.uri("/users/cadastro")
+				.bodyValue(user)
+				.exchange()
+				. expectStatus().isEqualTo(422);
 	}
 
 }
