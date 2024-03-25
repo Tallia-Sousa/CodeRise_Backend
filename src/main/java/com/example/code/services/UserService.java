@@ -26,7 +26,7 @@ public class UserService {
     private RepositorySugestoes repositorySugestoes;
 
 
-    @Autowired
+  
     public UserService(UserRepository repository, RepositorySugestoes repositorySugestoes) {
         this.repository = repository;
         this.repositorySugestoes = repositorySugestoes;
